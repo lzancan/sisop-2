@@ -2,7 +2,11 @@
 
 
 int identify2 (char *name, int size){
-    return 0;
+    char* identificador="Gabriel Ammes Pinho <230277> - Luciano Zancan <230047>";
+    strcpy(name,copy_string_size (identificador, size));
+    if(strcmp(name,identificador)==0)
+        return 0;
+    else return -1;
 }
 
 FILE2 create2 (char *filename){
