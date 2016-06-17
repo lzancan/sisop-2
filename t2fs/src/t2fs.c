@@ -3,9 +3,10 @@
 
 int identify2 (char *name, int size){
     char* identificador="Gabriel Ammes Pinho <230277> - Luciano Zancan <230047>";
-    strcpy(name,copy_string_size (identificador, size));
-    if(strcmp(name,identificador)==0)
+    if(size>=54){
+        strcpy(name,identificador);
         return 0;
+    }
     else return -1;
 }
 
