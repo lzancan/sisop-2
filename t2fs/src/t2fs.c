@@ -11,6 +11,7 @@ int identify2 (char *name, int size){
 }
 
 FILE2 create2 (char *filename){
+    procura_arquivo(filename);
     return 0;
 }
 
