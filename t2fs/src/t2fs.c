@@ -1,5 +1,10 @@
-#include "../include/main.h"
-
+#include <stdio.h>
+#include <stdlib.h>
+#include <string.h>
+#include "../include/apidisk.h"
+#include "../include/bitmap2.h"
+#include "../include/t2fs.h"
+#include "../include/util.h"
 
 int identify2 (char *name, int size){
     char* identificador="Gabriel Ammes Pinho <230277> - Luciano Zancan <230047>";
