@@ -11,7 +11,6 @@ void le_superbloco(struct t2fs_superbloco* superbloco){
     if(read_sector(0,content)==0){
         memcpy(superbloco, content, sizeof(struct t2fs_superbloco));
     }
-    //imprime_superbloco(superbloco);
 }
 
 void imprime_superbloco (struct t2fs_superbloco superbloco){
@@ -25,6 +24,17 @@ void imprime_superbloco (struct t2fs_superbloco superbloco){
     printf("tamanho dir raiz : %d\n", superbloco.rootSize); //Quantidade de blocos lógicos usados para armazenar o diretório raiz.
     printf("entradas no dir raiz: %d\n", superbloco.nOfDirEntries); //Quantidade de entradas no diretório raiz.
     printf("tamanho registro : %d\n", superbloco.fileEntrySize); //Quantidade de bytes de um registro na área de diretório.
+}
+
+void imprime_record (struct t2fs_record record){
+    printf("tipo (valor): %u\n",(unsigned int)record.TypeVal); // Tipo da entrada. Indica se o registro é inválido (0x00), arquivo (0x01) ou diretório (0x02)
+    printf("nome arquivo: %s\n",record.name);
+    printf("reservado: %u\n",(unsigned int)record.Reserved);
+    printf("tamanho arquivo (blocos): %d\n",record.blocksFileSize); //Tamanho do arquivo, expresso em número de blocos de dados
+    printf("tamanho arquivo (bytes): %d\n",record.bytesFileSize); //Tamanho do arquivo. Expresso em número de bytes.
+    printf("ponteiros diretos: %d e %d\n",record.dataPtr[0], record.dataPtr[1]); //Dois ponteiros diretos (little endian).
+    printf("ponteiro ind simples: %d\n",record.singleIndPtr); //Ponteiro de indireção simples (little endian).
+    printf("ponteiro ind dupla: %d\n",record.doubleIndPtr); //Ponteiro de indireção supla (little endian).
 }
 
 
@@ -57,7 +67,10 @@ int testa_nome(char* Filename){
 }
 
 int procura_arquivo (char* Filename){
-    testa_nome(Filename);
+    if(testa_nome(Filename)==0) // se não "bate" o nome, retorna 0
+        return 1;
+
+
     return 0;
 
 }
