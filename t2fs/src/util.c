@@ -10,7 +10,7 @@ void inicializa (int* superbloco_lido){
     if(*superbloco_lido==0){
         if(le_superbloco(&superbloco)==0){
             *superbloco_lido=1;
-            diretorio_corrente=".";
+            diretorio_corrente="."; // raiz
             inicio_bloco_dados = superbloco.superBlockSize+superbloco.bitmapSize+superbloco.rootSize;
             fim_bloco_dados=(superbloco.nOfSectors/superbloco.blockSize)-superbloco.blockSize; // último bloco do disco
             //printf ("%d\n",fim_bloco_dados);
@@ -108,8 +108,9 @@ void decrementa_posicao(){
 int procura_arquivo (char* Filename,char* diretorio_corrente){
     if(testa_nome(Filename)==0) // se não "bate" o nome, retorna 0
         return 1;
-    incrementa_posicao();incrementa_posicao();incrementa_posicao();
-    decrementa_posicao();
+    if(!strcmp(diretorio_corrente,".")){
+        // todo...
+    }
 
     return 0;
 
