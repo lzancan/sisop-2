@@ -16,58 +16,72 @@ int identify2 (char *name, int size){
 }
 
 FILE2 create2 (char *filename){
-    //procura_arquivo(filename);
+    inicializa (&superbloco_lido);
+    procura_arquivo(filename,diretorio_corrente);
     return 0;
 }
 
 int delete2 (char *filename){
+    inicializa (&superbloco_lido);
     return 0;
 }
 
 FILE2 open2 (char *filename){
+    inicializa (&superbloco_lido);
     return 0;
 }
 
 int close2 (FILE2 handle){
+    inicializa (&superbloco_lido);
     return 0;
 }
 
 int read2 (FILE2 handle, char *buffer, int size){
+    inicializa (&superbloco_lido);
     return 0;
 }
 
 int write2 (FILE2 handle, char *buffer, int size){
+    inicializa (&superbloco_lido);
     return 0;
 }
 
 int seek2 (FILE2 handle, DWORD offset){
+    inicializa (&superbloco_lido);
     return 0;
 }
 
 int mkdir2 (char *pathname){
+    inicializa (&superbloco_lido);
     return 0;
 }
 
 int rmdir2 (char *pathname){
+    inicializa (&superbloco_lido);
     return 0;
 }
 
 DIR2 opendir2 (char *pathname){
+    inicializa (&superbloco_lido);
     return 0;
 }
 
 int readdir2 (DIR2 handle, DIRENT2 *dentry){
+    inicializa (&superbloco_lido);
     return 0;
 }
 
 int closedir2 (DIR2 handle){
+    inicializa (&superbloco_lido);
     return 0;
 }
 
 int chdir2 (char *pathname){
+    inicializa (&superbloco_lido);
     return 0;
 }
 
 int getcwd2 (char *pathname, int size){
+    inicializa (&superbloco_lido);
     return 0;
 }

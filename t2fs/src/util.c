@@ -6,18 +6,35 @@
 #include "../include/t2fs.h"
 #include "../include/util.h"
 
-void le_superbloco(struct t2fs_superbloco* superbloco){
-    char content[SECTOR_SIZE];
-    if(read_sector(0,content)==0){
-        memcpy(superbloco, content, sizeof(struct t2fs_superbloco));
+void inicializa (int* superbloco_lido){
+    if(*superbloco_lido==0){
+        if(le_superbloco(&superbloco)==0){
+            *superbloco_lido=1;
+            diretorio_corrente=".";
+            inicio_bloco_dados = superbloco.superBlockSize+superbloco.bitmapSize+superbloco.rootSize;
+            fim_bloco_dados=(superbloco.nOfSectors/superbloco.blockSize)-superbloco.blockSize; // último bloco do disco
+            //printf ("%d\n",fim_bloco_dados);
+            posicao_atual=inicio_bloco_dados*4+contador_posicao*4;
+        }
     }
 }
 
-void le_record(struct t2fs_record* record,unsigned int sector){
+int le_superbloco(struct t2fs_superbloco* superbloco){
+    char content[SECTOR_SIZE];
+    if(read_sector(0,content)==0){
+        memcpy(superbloco, content, sizeof(struct t2fs_superbloco));
+        return 0;
+    }
+    else return -1;
+}
+
+int le_record(struct t2fs_record* record,unsigned int sector){
     char content[SECTOR_SIZE];
     if(read_sector(sector,content)==0){
         memcpy(record, content, sizeof(struct t2fs_record));
+        return 0;
     }
+    else return -1;
 }
 
 void imprime_superbloco (struct t2fs_superbloco superbloco){
@@ -73,10 +90,26 @@ int testa_nome(char* Filename){
     return 0;
 }
 
+void incrementa_posicao(){
+    if(contador_posicao<((fim_bloco_dados/4)-inicio_bloco_dados)){
+        contador_posicao++;
+        posicao_atual=inicio_bloco_dados*4+contador_posicao*4;
+    }
+}
+
+void decrementa_posicao(){
+    if(contador_posicao>0){
+        contador_posicao--;
+        posicao_atual=inicio_bloco_dados*4+contador_posicao*4;
+    }
+}
+
+
 int procura_arquivo (char* Filename,char* diretorio_corrente){
     if(testa_nome(Filename)==0) // se não "bate" o nome, retorna 0
         return 1;
-
+    incrementa_posicao();incrementa_posicao();incrementa_posicao();
+    decrementa_posicao();
 
     return 0;
 
