@@ -13,6 +13,13 @@ void le_superbloco(struct t2fs_superbloco* superbloco){
     }
 }
 
+void le_record(struct t2fs_record* record,unsigned int sector){
+    char content[SECTOR_SIZE];
+    if(read_sector(sector,content)==0){
+        memcpy(record, content, sizeof(struct t2fs_record));
+    }
+}
+
 void imprime_superbloco (struct t2fs_superbloco superbloco){
     printf("id: %s\n",superbloco.id);
     printf("versao: %x\n",superbloco.version);
@@ -66,7 +73,7 @@ int testa_nome(char* Filename){
     return 0;
 }
 
-int procura_arquivo (char* Filename){
+int procura_arquivo (char* Filename,char* diretorio_corrente){
     if(testa_nome(Filename)==0) // se não "bate" o nome, retorna 0
         return 1;
 
