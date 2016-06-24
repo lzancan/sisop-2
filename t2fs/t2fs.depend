@@ -1,8 +1,8 @@
 # depslib dependency file v1.0
-1466346582 source:/home/aluno/sisop-2/t2fs/src/main.c
+1466717657 source:/home/aluno/sisop-2/t2fs/src/main.c
 	"../include/main.h"
 
-1465765406 /home/aluno/sisop-2/t2fs/include/main.h
+1466714133 /home/aluno/sisop-2/t2fs/include/main.h
 	<stdio.h>
 	<stdlib.h>
 	<string.h>
@@ -11,11 +11,11 @@
 	"../include/t2fs.h"
 	"../include/util.h"
 
-1465660871 /home/aluno/sisop-2/t2fs/include/apidisk.h
+1466714133 /home/aluno/sisop-2/t2fs/include/apidisk.h
 
-1465308136 /home/aluno/sisop-2/t2fs/include/bitmap2.h
+1466714133 /home/aluno/sisop-2/t2fs/include/bitmap2.h
 
-1465308146 /home/aluno/sisop-2/t2fs/include/t2fs.h
+1466714133 /home/aluno/sisop-2/t2fs/include/t2fs.h
 
 1466344017 source:/home/aluno/sisop-2/t2fs/src/t2fs.c
 	<stdio.h>
@@ -35,5 +35,5 @@
 	"../include/t2fs.h"
 	"../include/util.h"
 
-1466346794 /home/aluno/sisop-2/t2fs/include/util.h
+1466778839 /home/aluno/sisop-2/t2fs/include/util.h
 

@@ -17,7 +17,16 @@ int identify2 (char *name, int size){
 
 FILE2 create2 (char *filename){
     inicializa (&superbloco_lido);
-    procura_arquivo(filename,diretorio_corrente);
+    if(procura_arquivo(filename,diretorio_corrente)) //se existe o arquivo
+        return -1;
+    else{
+        int primeiroBloco = 0;
+        primeiroBloco = searchFreeBlock2();
+        if(primeiroBloco == 0)
+            return -1;
+        inicializaRecord(filename,primeiroBloco);
+
+    }
     return 0;
 }
 
@@ -28,11 +37,14 @@ int delete2 (char *filename){
 
 FILE2 open2 (char *filename){
     inicializa (&superbloco_lido);
-    return 0;
+    //ACHA O ARQUIVO
+    int handle = open(record,diretorio_corrente);//NÃO SEI SE É ESSA A CHAMADA DO PONTEIRO
+    return handle;
 }
 
 int close2 (FILE2 handle){
     inicializa (&superbloco_lido);
+    close(0x01, handle);
     return 0;
 }
 
@@ -48,6 +60,11 @@ int write2 (FILE2 handle, char *buffer, int size){
 
 int seek2 (FILE2 handle, DWORD offset){
     inicializa (&superbloco_lido);
+    OPENED_FILE* aux = findOpenedFile(handle);
+    if(!aux) return -1;
+    if(aux->record.bytesFileSize <= offset) aux->cursor = offset;
+    else if (offset == -1) aux->cursor = aux->record.bytesFileSize;
+    else return ERROR_SIGNAL;
     return 0;
 }
 
@@ -63,7 +80,10 @@ int rmdir2 (char *pathname){
 
 DIR2 opendir2 (char *pathname){
     inicializa (&superbloco_lido);
-    return 0;
+    //ACHA O DIREtORIO
+    int handle = 0;
+    //handle = open(record,PAI DO DIRETORIO QUE TU ACHOU);//NÃO SEI SE É ESSA A CHAMADA DO PONTEIRO
+    return handle;
 }
 
 int readdir2 (DIR2 handle, DIRENT2 *dentry){
@@ -73,6 +93,7 @@ int readdir2 (DIR2 handle, DIRENT2 *dentry){
 
 int closedir2 (DIR2 handle){
     inicializa (&superbloco_lido);
+    close(0x02, handle);
     return 0;
 }
 
