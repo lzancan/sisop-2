@@ -8,6 +8,6 @@ int main(){
     //printf ("%d\n",posicao_atual);
     //printf ("%d\n",inicio_bloco_dados*4);
     //le_record(&record,inicio_bloco_dados*4);
-    imprime_record(record);
+    //imprime_record(record);
     return 0;
 }

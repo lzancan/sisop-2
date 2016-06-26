@@ -1,11 +1,13 @@
 #ifndef __util_h__
 #define __util_h__
 
+#define ERRO -1
+
 typedef struct opened_file2 {
     int handle;
     struct t2fs_record record;
     int cursor;
-    char* fatherName;
+    char* father_sector;
     struct opened_file2 *next;
 } OPENED_FILE;
 
@@ -14,8 +16,8 @@ typedef struct opened_files2 {
     OPENED_FILE *last;
 } OPENED_FILES;
 
-int nOpenedFiles = 0;
-int nOpenedDirs = 0;
+//int nOpenedFiles = 0;
+//int nOpenedDirs = 0;
 static int superbloco_lido =0;
 char* diretorio_corrente;
 struct t2fs_superbloco superbloco;

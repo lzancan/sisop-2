@@ -66,11 +66,11 @@ void imprime_record (struct t2fs_record record){
 
 
 int eh_alfanumerico (char letra){
-    if(letra >= 48 && letra <= 57) // números de 0 a 9
+    if(letra >= 0 && letra <= 9) // números de 0 a 9
         return 1;
-    else if (letra >=97 && letra <= 122) // letras de (a-z) (minúsculas)
+    else if (letra >='a' && letra <= 'z') // letras de (a-z) (minúsculas)
         return 1;
-        else if (letra>=65 && letra <=90) // letras de (A-Z) (maiúsculas)
+        else if (letra>='A' && letra <='Z') // letras de (A-Z) (maiúsculas)
             return 1;
             else return 0; // caso não alfanumérico, retorna 0
 }
@@ -134,11 +134,12 @@ struct t2fs_record* inicializaRecord(char *name, int primeiroBloco)
 //OPEN FILES
 
 void printFile(OPENED_FILE p){
-    printf("handle: %d cursos: %d father sector: %d record position: %d\n", p.handle, p.cursor, p.father_sector, p.record_position);
+    //printf("handle: %d cursos: %d father sector: %d record position: %d\n", p.handle, p.cursor, p.father_sector, p.record_position);
 }
 
 OPENED_FILE* findOpenedFile(int handle)
 {
+    /*
     OPENED_FILE *file;
 
     if(opened_files->first == NULL) return NULL;
@@ -149,12 +150,14 @@ OPENED_FILE* findOpenedFile(int handle)
         }
         file = file->next;
     }
-
+*/
     return NULL;
+
 }
 
-int open(t2fs_record record, char* fatherName)//NÂO SEI SE É ASSIM O PARAMETRO
+int open(struct t2fs_record record, char* fatherName)//NÂO SEI SE É ASSIM O PARAMETRO
 {
+    /*
     static int last_handle = 0;
     OPENED_FILE *newFile;
     int handle;
@@ -197,9 +200,11 @@ int open(t2fs_record record, char* fatherName)//NÂO SEI SE É ASSIM O PARAMETRO
     return handle;
     }
     return -1; //MAX de 20 arquivos
+    */
 }
 
 int close(char TypeVal, int handle) {
+    /*
     if(TypeVal == 0x01){
         OPENED_FILE *file = NULL;
         OPENED_FILE *previous = NULL;
@@ -250,4 +255,5 @@ int close(char TypeVal, int handle) {
     }
 
     return ERROR_SIGNAL;
+    */
 }

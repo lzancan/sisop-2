@@ -12,7 +12,7 @@ int identify2 (char *name, int size){
         strcpy(name,identificador);
         return 0;
     }
-    else return -1;
+    else return ERRO;
 }
 
 FILE2 create2 (char *filename){
@@ -64,7 +64,7 @@ int seek2 (FILE2 handle, DWORD offset){
     if(!aux) return -1;
     if(aux->record.bytesFileSize <= offset) aux->cursor = offset;
     else if (offset == -1) aux->cursor = aux->record.bytesFileSize;
-    else return ERROR_SIGNAL;
+    else return ERRO;
     return 0;
 }
 
