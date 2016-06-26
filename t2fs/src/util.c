@@ -108,6 +108,7 @@ void decrementa_posicao(){
 int procura_arquivo (char* Filename,char* diretorio_corrente){
     if(testa_nome(Filename)==0) // se não "bate" o nome, retorna 0
         return 1;
+
     if(!strcmp(diretorio_corrente,".")){
         // todo...
     }
