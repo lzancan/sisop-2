@@ -1,6 +1,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
+#include <math.h>
 #include "../include/apidisk.h"
 #include "../include/bitmap2.h"
 #include "../include/t2fs.h"
@@ -17,6 +18,7 @@ int identify2 (char *name, int size){
 
 FILE2 create2 (char *filename){
     inicializa (&superbloco_lido);
+    /*
     if(procura_arquivo(filename,diretorio_corrente)) //se existe o arquivo
         return -1;
     else{
@@ -26,7 +28,7 @@ FILE2 create2 (char *filename){
             return -1;
         inicializaRecord(filename,primeiroBloco);
 
-    }
+    }*/
     return 0;
 }
 
@@ -36,10 +38,12 @@ int delete2 (char *filename){
 }
 
 FILE2 open2 (char *filename){
+    /*
     inicializa (&superbloco_lido);
     //ACHA O ARQUIVO
     int handle = open(record,diretorio_corrente);//NÃO SEI SE É ESSA A CHAMADA DO PONTEIRO
     return handle;
+    */
 }
 
 int close2 (FILE2 handle){
