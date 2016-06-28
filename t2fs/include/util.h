@@ -5,9 +5,9 @@
 
 typedef struct opened_file2 {
     int handle;
+    char* nome;
     struct t2fs_record record;
-    int cursor;
-    char* father_sector;
+    int current_pointer;
     struct opened_file2 *next;
 } OPENED_FILE;
 
@@ -26,6 +26,8 @@ struct IndPtr{
 //int nOpenedDirs = 0;
 static int superbloco_lido =0;
 char* diretorio_corrente;
+char* path;
+int contador_diretorios;// conta o número de diretórios do raiz ao pathname
 int dir_corrente;
 struct t2fs_superbloco superbloco;
 struct t2fs_record record_corrente;
@@ -93,5 +95,8 @@ int search_sector_TypeVal (struct t2fs_record* records,unsigned int TypeVal,unsi
 int procura_continuidade_dir_TypeVal (struct t2fs_record* record,unsigned int TypeVal);
 int procura_single_ind_ptr_TypeVal (struct t2fs_record* records,unsigned int TypeVal,unsigned int singleIndPtr_setor);
 int procura_double_ind_ptr_TypeVal(struct t2fs_record* records,unsigned int TypeVal,unsigned int doubleIndPtr_setor);
+// libera os blocos relacionados aos ponteiros. É usada quando se exclui um arquivo do disco.
+void libera_blocos_record(int ponteiro_dir0,int ponteiro_dir1,int ponteiro_ind_simples,int ponteiro_ind_duplo);
+
 
 #endif
