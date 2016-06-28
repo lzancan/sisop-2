@@ -1,4 +1,11 @@
-#include "../include/main.h"
+#include <stdio.h>
+#include <stdlib.h>
+#include <string.h>
+#include <math.h>
+#include "../include/apidisk.h"
+#include "../include/bitmap2.h"
+#include "../include/t2fs.h"
+#include "../include/util.h"
 
 int main(){
 //    printf("%d\n",create2("oi"));
@@ -15,7 +22,7 @@ int main(){
     //open2("oi1");
     //open2("oi2");
     char oi[MAX_FILE_NAME_SIZE];
-    getcwd2 (oi, 15);
+    //getcwd2 (oi, 15);
     printf("%s",oi);
     //imprime_arquivos_abertos();
     //imprime_arquivos_abertos();
@@ -37,7 +44,7 @@ int main(){
     //printf ("%s",(char*) setor);
     //le_setor(records,8);
     //imprime_setor(records);
-    char *path= "/teste/hue/kkk/lol/hehe/birl";
+    //char *path= "/teste/hue/kkk/lol/hehe/birl";
     //mkdir2(path);
 
     return 0;

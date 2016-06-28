@@ -33,7 +33,6 @@
 		</Compiler>
 		<Unit filename="include/apidisk.h" />
 		<Unit filename="include/bitmap2.h" />
-		<Unit filename="include/main.h" />
 		<Unit filename="include/t2fs.h" />
 		<Unit filename="include/util.h" />
 		<Unit filename="src/main.c">
