@@ -1,7 +1,7 @@
 #include "../include/main.h"
 
 int main(){
-    //printf("%d\n",create2("oi"));
+//    printf("%d\n",create2("oi"));
     //inicializa(&superbloco_lido);
     //le_superbloco(&superbloco);
     //imprime_superbloco(superbloco);
@@ -37,5 +37,8 @@ int main(){
     //printf ("%s",(char*) setor);
     //le_setor(records,8);
     //imprime_setor(records);
+    char *path= "/teste/hue/kkk/lol/hehe/birl";
+    mkdir2(path);
+
     return 0;
 }

@@ -454,6 +454,35 @@ void libera_blocos_record(int ponteiro_dir0,int ponteiro_dir1,int ponteiro_ind_s
     }
 }
 
+char** matPath(char *path, int *k){
+    char* token;
+    char* string;
+    char* lim = "/";
+    char* tofree;
+    char* tst[32];
+    string = strdup(path);
+    int i=0;
+    if (string != NULL) {
+
+        tofree = string;
+        token = strtok(string, lim);
+        tst[i] = strdup(token);
+//        printf("%s\n", tst[i]);
+        i++;
+        while ((token = strtok(NULL, lim)) != NULL)
+        {
+            tst[i] = strdup(token);
+//            printf("%s\n", tst[i]);
+            i++;
+        }
+
+    free(tofree);
+    }
+    *k=i;
+
+    return tst;
+}
+
 //OPEN
 
 OPENED_FILE* procura_arquivo_aberto(int handle)

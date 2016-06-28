@@ -73,14 +73,16 @@ FILE2 open2 (char *filename){
     if(record_do_setor==ERRO){ // não achou o arquivo
         return ERRO;
     }
-    else if(records[record_do_setor].TypeVal==TYPEVAL_REGULAR){ // achou o arquivo, vê se é regular e se for abre ele...
-            int retorno=abre_arquivo_diretorio(records[record_do_setor]);
-            if(retorno != ERRO){
-                return retorno;
-            }
-            else return ERRO;
+    else{ // achou o arquivo, abre ele...
+        abre_arquivo(records[record_do_setor]);
     }
-    return ERRO;
+
+
+
+
+    //int handle = open(record,diretorio_corrente);//NÃO SEI SE É ESSA A CHAMADA DO PONTEIRO
+   // return handle;
+
 }
 
 int close2 (FILE2 handle){
@@ -114,7 +116,10 @@ int seek2 (FILE2 handle, DWORD offset){
 }
 
 int mkdir2 (char *pathname){
-    inicializa (&superbloco_lido);
+
+
+
+        inicializa (&superbloco_lido);
     contador_diretorios=0;
     struct t2fs_record records[4]; // declara array de records, que formam um setor
     char* path="";
@@ -129,6 +134,15 @@ int mkdir2 (char *pathname){
     }
         // exemplo: 'dir1/dir2/dir3' , exemplo2: 'dir1'
     // procura o diretório, procurando de um em um...
+    int i = 0;//numero de dirs
+    char **temp;
+    temp = matPath(pathname,&i);
+    char* dirs[i];
+    int k=0;
+    for(k=0;k<i;k++)//tem que fazer esse for pq da uns erros se ler direto do temp
+    {
+        dirs[k] = temp[k];
+    }
 
     // TODO
 
