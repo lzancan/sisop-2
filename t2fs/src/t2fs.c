@@ -114,50 +114,50 @@ int seek2 (FILE2 handle, DWORD offset){
 }
 
 int mkdir2 (char *pathname){
+
+
+
+        inicializa (&superbloco_lido);
+    contador_diretorios=0;
+    struct t2fs_record records[4]; // declara array de records, que formam um setor
+    char* path="";
+    if(caminho_absoluto_relativo (pathname)==0){// relativo, começa SEM '/' (0= relativo, 1= absoluto) // absoluto é a partir do raiz, relativo é a partir do diretório corrente
+        // relativo, a partir do diretório corrente
+        strcat(path,diretorio_corrente); // path recebe o diretório corrente ('/')
+        strcat(path,pathname);// path recebe o pathname ('/dir1')
+    }
+    else{
+        // absoluto, a partir do raiz;
+        strcpy(path,pathname); //path recebe o nome do pathname ('/dir1')
+    }
+        // exemplo: 'dir1/dir2/dir3' , exemplo2: 'dir1'
+    // procura o diretório, procurando de um em um...
     int i = 0;//numero de dirs
-    int k=0;
     char **temp;
     temp = matPath(pathname,&i);
     char* dirs[i];
-    for(k=0;k<i;k++)
+    int k=0;
+    for(k=0;k<i;k++)//tem que fazer esse for pq da uns erros se ler direto do temp
     {
         dirs[k] = temp[k];
     }
 
+    // TODO
 
-    //    inicializa (&superbloco_lido);
-//    contador_diretorios=0;
-//    struct t2fs_record records[4]; // declara array de records, que formam um setor
-//    char* path="";
-//    if(caminho_absoluto_relativo (pathname)==0){// relativo, começa SEM '/' (0= relativo, 1= absoluto) // absoluto é a partir do raiz, relativo é a partir do diretório corrente
-//        // relativo, a partir do diretório corrente
-//        strcat(path,diretorio_corrente); // path recebe o diretório corrente ('/')
-//        strcat(path,pathname);// path recebe o pathname ('/dir1')
-//    }
-//    else{
-//        // absoluto, a partir do raiz;
-//        strcpy(path,pathname); //path recebe o nome do pathname ('/dir1')
-//    }
-//        // exemplo: 'dir1/dir2/dir3' , exemplo2: 'dir1'
-//    // procura o diretório, procurando de um em um...
-//
-//
-//    // TODO
-//
-//    // *********************
-//    // se não existir, cria:
-//    struct t2fs_record *novos_records = (struct t2fs_record*) calloc(4, sizeof(struct t2fs_record));
-//
-//    novos_records[0].bytesFileSize = 0;
-//    novos_records[0].TypeVal = TYPEVAL_DIRETORIO;
-//    strcpy(novos_records[0].name, ".");
-//    novos_records[0].dataPtr[0] = 20; // bloco onde será gravado
-//
-//    novos_records[1].bytesFileSize = 0;
-//    novos_records[1].TypeVal = TYPEVAL_DIRETORIO;
-//    strcpy(novos_records[1].name, "..");
-//    novos_records[0].dataPtr[0] = 20; // lugar do pai
-//
+    // *********************
+    // se não existir, cria:
+    struct t2fs_record *novos_records = (struct t2fs_record*) calloc(4, sizeof(struct t2fs_record));
+
+    novos_records[0].bytesFileSize = 0;
+    novos_records[0].TypeVal = TYPEVAL_DIRETORIO;
+    strcpy(novos_records[0].name, ".");
+    novos_records[0].dataPtr[0] = 20; // bloco onde será gravado
+
+    novos_records[1].bytesFileSize = 0;
+    novos_records[1].TypeVal = TYPEVAL_DIRETORIO;
+    strcpy(novos_records[1].name, "..");
+    novos_records[0].dataPtr[0] = 20; // lugar do pai
+
 
 }
 

@@ -11,6 +11,7 @@ void inicializa (int* superbloco_lido){
     if(*superbloco_lido==0){
         numero_arquivos_abertos = 0;
         numero_diretorios_abertos = 0;
+        handle=0;
         //printf("inicializando...\n");
         if(le_superbloco(&superbloco)==0){
             *superbloco_lido=1;
@@ -503,55 +504,73 @@ OPENED_FILE* procura_arquivo_aberto(int handle)
     return NULL;
 }
 
-//void printFile(OPENED_FILE p){
-//}
+void imprime_arquivo_aberto(OPENED_FILE arquivo){
+    printf("handle: %d\n", arquivo.handle);
+    printf("nome: %s\n",arquivo.record.name);
+    printf ("current_pointer: %d\n", arquivo.current_pointer);
+}
 
-int abre_arquivo(struct t2fs_record record, char* fatherName){
-    /*
-    static int last_handle = 0;
-    OPENED_FILE *newFile;
-    int handle;
-    if((nOpenedFiles < 20) || (nOpenedDirs < 20))
-    {
-    newFile = calloc(1, sizeof(OPENED_FILE));
-    if (newFile == NULL) {
-        // Allocation failure, out of memory.
-        return ERROR_SIGNAL;
+void imprime_arquivos_abertos (){
+    OPENED_FILE* arquivo_atual=arquivos_abertos.first;
+    OPENED_FILE* diretorio_atual=diretorios_abertos.first;
+    if(numero_arquivos_abertos>0){ // printa os arquivos abertos
+        while(arquivo_atual!=arquivos_abertos.last){
+           imprime_arquivo_aberto(*arquivo_atual);
+           arquivo_atual=arquivo_atual->next;
+        }
+        if(arquivo_atual==arquivos_abertos.last){
+            imprime_arquivo_aberto(*arquivo_atual);
+        }
     }
-    handle = ++last_handle;
-    newFile->handle = handle;
-    newFile->record = record;
-    newFile->cursor = 0;
-    newFile->fatherName = fatherName;
-    if(record.TypeVal == 0x01)//NÃO SEI SE TA CERTO ESSE CMP
-    {
-        if (opened_files->last == NULL) {//ta vazio
-        opened_files->first = newFile;
-        opened_files->last = newFile;
-    } else {
-        opened_files->last->next = newFile;
-        opened_files->last = newFile;
+    if(numero_diretorios_abertos>0){ // printa os diretorios abertos
+        while(diretorio_atual!=diretorios_abertos.last){
+           imprime_arquivo_aberto(*diretorio_atual);
+           diretorio_atual=diretorio_atual->next;
+        }
+        if(diretorio_atual==arquivos_abertos.last){
+            imprime_arquivo_aberto(*diretorio_atual);
+        }
     }
-    nOpenedFiles++;
-    }
-    else if(record.TypeVal == 0x02){
-        if (opened_dirs->last == NULL) {//ta vazio
-        opened_dirs->first = newFile;
-        opened_dirs->last = newFile;
-    } else {
-        opened_dirs->last->next = newFile;
-        opened_dirss->last = newFile;
-    }
-    nOpenedDirs++;
+}
 
+int abre_arquivo_diretorio(struct t2fs_record record){
 
+    OPENED_FILE *novo_arquivo;
+    if(numero_arquivos_abertos + numero_diretorios_abertos>20){ // número máximo de arquivos abertos
+        return ERRO;
     }
 
-    return handle;
+    novo_arquivo = calloc(1, sizeof(OPENED_FILE));
+
+    if (novo_arquivo != NULL) {
+        novo_arquivo->handle = handle;
+        handle++;
+        //novo_arquivo->nome="";
+        novo_arquivo->record = record;
+        novo_arquivo->current_pointer = 0;
+        if(record.TypeVal == TYPEVAL_REGULAR){
+            if (arquivos_abertos.last == NULL) {//ta vazio
+                arquivos_abertos.first = novo_arquivo;
+                arquivos_abertos.last = novo_arquivo;
+            } else {
+                arquivos_abertos.last->next = novo_arquivo;
+                arquivos_abertos.last = novo_arquivo;
+            }
+            numero_arquivos_abertos++;
+        }
+        else if(record.TypeVal == TYPEVAL_DIRETORIO){
+                if (diretorios_abertos.last == NULL) {//ta vazio
+                    diretorios_abertos.first = novo_arquivo;
+                    diretorios_abertos.last =novo_arquivo;
+                } else {
+                    diretorios_abertos.last->next = novo_arquivo;
+                    diretorios_abertos.last = novo_arquivo;
+                }
+                numero_diretorios_abertos++;
+        }
+    return novo_arquivo->handle;
     }
-    return -1; //MAX de 20 arquivos
-    */
-    return 0;
+    return ERRO;
 }
 
 int close(char TypeVal, int handle) {

@@ -5,7 +5,7 @@
 
 typedef struct opened_file2 {
     int handle;
-    char* nome;
+    //char* nome;
     struct t2fs_record record;
     int current_pointer;
     struct opened_file2 *next;
@@ -25,6 +25,9 @@ struct IndPtr{
 int numero_arquivos_abertos;
 int numero_diretorios_abertos;
 
+OPENED_FILES arquivos_abertos;
+OPENED_FILES diretorios_abertos;
+
 static int superbloco_lido =0;
 char* diretorio_corrente;
 char* path;
@@ -41,9 +44,8 @@ int posicao_atual; // equivale a bloco atual
 int setor_atual; // setor no bloco atual (posicao atual)
 int TAMANHO_BLOCO;
 int TAM_MAX_ARQ;
+int handle;
 
-static OPENED_FILES arquivos_abertos;
-static OPENED_FILES diretorios_abertos;
 
 // inicializa (le o disco caso ainda não tiver sido lido) e seta diretório corrente para o raiz
 void inicializa (int* superbloco_lido);
@@ -100,6 +102,12 @@ int procura_double_ind_ptr_TypeVal(struct t2fs_record* records,unsigned int Type
 void libera_blocos_record(int ponteiro_dir0,int ponteiro_dir1,int ponteiro_ind_simples,int ponteiro_ind_duplo);
 // procura pelo arquivo com o handle igual ao do campo 'handle' e retorna esse arquivo
 OPENED_FILE* procura_arquivo_aberto(int handle);
+// função que abre um arquivo. retorna o handle
+int abre_arquivo_diretorio(struct t2fs_record record);
+// imprime informações de um arquivo aberto
+void imprime_arquivo_aberto(OPENED_FILE arquivo);
+//imprime todos os arquivos (incluindo os diretorios) abertos
+void imprime_arquivos_abertos ();
 
 char** matPath(char *path, int *i);
 

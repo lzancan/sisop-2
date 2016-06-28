@@ -16,13 +16,13 @@
 	<File name="include/util.h" open="1" top="0" tabpos="1">
 		<Cursor position="5518" topLine="89" />
 	</File>
-	<File name="src/main.c" open="1" top="1" tabpos="4">
-		<Cursor position="615" topLine="7" />
+	<File name="src/main.c" open="1" top="0" tabpos="4">
+		<Cursor position="589" topLine="7" />
 	</File>
-	<File name="src/t2fs.c" open="1" top="0" tabpos="2">
-		<Cursor position="4494" topLine="113" />
+	<File name="src/t2fs.c" open="1" top="1" tabpos="2">
+		<Cursor position="4434" topLine="111" />
 	</File>
 	<File name="src/util.c" open="1" top="0" tabpos="3">
-		<Cursor position="16479" topLine="452" />
+		<Cursor position="16209" topLine="467" />
 	</File>
 </CodeBlocks_layout_file>
