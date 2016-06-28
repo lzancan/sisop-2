@@ -9,6 +9,8 @@
 
 void inicializa (int* superbloco_lido){
     if(*superbloco_lido==0){
+        numero_arquivos_abertos = 0;
+        numero_diretorios_abertos = 0;
         //printf("inicializando...\n");
         if(le_superbloco(&superbloco)==0){
             *superbloco_lido=1;
@@ -453,29 +455,29 @@ void libera_blocos_record(int ponteiro_dir0,int ponteiro_dir1,int ponteiro_ind_s
 
 //OPEN
 
-void printFile(OPENED_FILE p){
-}
-
-OPENED_FILE* findOpenedFile(int handle)
+OPENED_FILE* procura_arquivo_aberto(int handle)
 {
-    /*
-    OPENED_FILE *file;
+    OPENED_FILE *arquivo;
 
-    if(opened_files->first == NULL) return NULL;
-    file = opened_files->fidrst;
-    while (file != NULL) {
-        if (file>handle == handle) {
-            return file;
-        }
-        file = file->next;
+    if(arquivos_abertos.first == NULL) {
+        return NULL;
     }
-*/
+    else{
+        arquivo = arquivos_abertos.first;
+        while (arquivo != NULL) {
+            if (arquivo->handle == handle) {
+                return arquivo;
+            }
+            arquivo = arquivo->next;
+        }
+    }
     return NULL;
-
 }
 
-int open(struct t2fs_record record, char* fatherName)//NÂO SEI SE É ASSIM O PARAMETRO
-{
+//void printFile(OPENED_FILE p){
+//}
+
+int abre_arquivo(struct t2fs_record record, char* fatherName){
     /*
     static int last_handle = 0;
     OPENED_FILE *newFile;

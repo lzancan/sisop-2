@@ -22,8 +22,9 @@ struct IndPtr{
 };
 
 
-//int nOpenedFiles = 0;
-//int nOpenedDirs = 0;
+int numero_arquivos_abertos;
+int numero_diretorios_abertos;
+
 static int superbloco_lido =0;
 char* diretorio_corrente;
 char* path;
@@ -41,8 +42,8 @@ int setor_atual; // setor no bloco atual (posicao atual)
 int TAMANHO_BLOCO;
 int TAM_MAX_ARQ;
 
-static struct opened_files2 opened_files;
-static struct opened_files2 opened_dirs;
+static OPENED_FILES arquivos_abertos;
+static OPENED_FILES diretorios_abertos;
 
 // inicializa (le o disco caso ainda não tiver sido lido) e seta diretório corrente para o raiz
 void inicializa (int* superbloco_lido);
@@ -97,6 +98,7 @@ int procura_single_ind_ptr_TypeVal (struct t2fs_record* records,unsigned int Typ
 int procura_double_ind_ptr_TypeVal(struct t2fs_record* records,unsigned int TypeVal,unsigned int doubleIndPtr_setor);
 // libera os blocos relacionados aos ponteiros. É usada quando se exclui um arquivo do disco.
 void libera_blocos_record(int ponteiro_dir0,int ponteiro_dir1,int ponteiro_ind_simples,int ponteiro_ind_duplo);
-
+// procura pelo arquivo com o handle igual ao do campo 'handle' e retorna esse arquivo
+OPENED_FILE* procura_arquivo_aberto(int handle);
 
 #endif

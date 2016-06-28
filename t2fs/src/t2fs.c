@@ -73,8 +73,8 @@ FILE2 open2 (char *filename){
     if(record_do_setor==ERRO){ // não achou o arquivo
         return ERRO;
     }
-    else{ // achou o arquivo
-
+    else{ // achou o arquivo, abre ele...
+        abre_arquivo(records[record_do_setor]);
     }
 
 
