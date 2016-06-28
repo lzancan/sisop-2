@@ -101,4 +101,7 @@ void libera_blocos_record(int ponteiro_dir0,int ponteiro_dir1,int ponteiro_ind_s
 // procura pelo arquivo com o handle igual ao do campo 'handle' e retorna esse arquivo
 OPENED_FILE* procura_arquivo_aberto(int handle);
 
+char** matPath(char *path, int *i);
+
+
 #endif
