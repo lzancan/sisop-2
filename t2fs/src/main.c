@@ -38,7 +38,7 @@ int main(){
     //le_setor(records,8);
     //imprime_setor(records);
     char *path= "/teste/hue/kkk/lol/hehe/birl";
-    mkdir2(path);
+    //mkdir2(path);
 
     return 0;
 }

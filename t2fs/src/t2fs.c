@@ -74,7 +74,7 @@ FILE2 open2 (char *filename){
         return ERRO;
     }
     else{ // achou o arquivo, abre ele...
-        abre_arquivo(records[record_do_setor]);
+        abre_arquivo_diretorio(records[record_do_setor]);
     }
 
 

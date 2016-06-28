@@ -1,16 +1,8 @@
 # depslib dependency file v1.0
-<<<<<<< HEAD
-1467150542 source:/home/aluno/sisop-2/t2fs/src/main.c
-=======
-<<<<<<< HEAD
-1467148092 source:/home/aluno/sisop-2/t2fs/src/main.c
-=======
-1467144329 source:/home/aluno/sisop-2/t2fs/src/main.c
->>>>>>> c20a8ffbefcafc72c565f9fb229ed3e54e1a83b7
->>>>>>> f86d397dafefdaee73651ad378a78e5990d511f7
+1467150719 source:/home/aluno/sisop-2/t2fs/src/main.c
 	"../include/main.h"
 
-1467139491 /home/aluno/sisop-2/t2fs/include/main.h
+1467035781 /home/aluno/sisop-2/t2fs/include/main.h
 	<stdio.h>
 	<stdlib.h>
 	<string.h>
@@ -20,21 +12,13 @@
 	"../include/t2fs.h"
 	"../include/util.h"
 
-1467139491 /home/aluno/sisop-2/t2fs/include/apidisk.h
+1465660871 /home/aluno/sisop-2/t2fs/include/apidisk.h
 
-1467139491 /home/aluno/sisop-2/t2fs/include/bitmap2.h
+1465308136 /home/aluno/sisop-2/t2fs/include/bitmap2.h
 
-1467139491 /home/aluno/sisop-2/t2fs/include/t2fs.h
+1465308146 /home/aluno/sisop-2/t2fs/include/t2fs.h
 
-<<<<<<< HEAD
-1467150557 source:/home/aluno/sisop-2/t2fs/src/t2fs.c
-=======
-<<<<<<< HEAD
-1467148601 source:/home/aluno/sisop-2/t2fs/src/t2fs.c
-=======
-1467144335 source:/home/aluno/sisop-2/t2fs/src/t2fs.c
->>>>>>> c20a8ffbefcafc72c565f9fb229ed3e54e1a83b7
->>>>>>> f86d397dafefdaee73651ad378a78e5990d511f7
+1467151012 source:/home/aluno/sisop-2/t2fs/src/t2fs.c
 	<stdio.h>
 	<stdlib.h>
 	<string.h>
@@ -44,15 +28,7 @@
 	"../include/t2fs.h"
 	"../include/util.h"
 
-<<<<<<< HEAD
-1467149948 source:/home/aluno/sisop-2/t2fs/src/util.c
-=======
-<<<<<<< HEAD
-1467146628 source:/home/aluno/sisop-2/t2fs/src/util.c
-=======
-1467144206 source:/home/aluno/sisop-2/t2fs/src/util.c
->>>>>>> c20a8ffbefcafc72c565f9fb229ed3e54e1a83b7
->>>>>>> f86d397dafefdaee73651ad378a78e5990d511f7
+1467150719 source:/home/aluno/sisop-2/t2fs/src/util.c
 	"../include/apidisk.h"
 	"../include/bitmap2.h"
 	<stdio.h>
@@ -62,13 +38,5 @@
 	"../include/t2fs.h"
 	"../include/util.h"
 
-<<<<<<< HEAD
-1467145273 /home/aluno/sisop-2/t2fs/include/util.h
-=======
-<<<<<<< HEAD
-1467145714 /home/aluno/sisop-2/t2fs/include/util.h
-=======
-1467143249 /home/aluno/sisop-2/t2fs/include/util.h
->>>>>>> c20a8ffbefcafc72c565f9fb229ed3e54e1a83b7
->>>>>>> f86d397dafefdaee73651ad378a78e5990d511f7
+1467150719 /home/aluno/sisop-2/t2fs/include/util.h
 
