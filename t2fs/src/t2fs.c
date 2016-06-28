@@ -73,16 +73,14 @@ FILE2 open2 (char *filename){
     if(record_do_setor==ERRO){ // não achou o arquivo
         return ERRO;
     }
-    else{ // achou o arquivo, abre ele...
-        abre_arquivo(records[record_do_setor]);
+    else if(records[record_do_setor].TypeVal==TYPEVAL_REGULAR){ // achou o arquivo, vê se é regular e se for abre ele...
+            int retorno=abre_arquivo_diretorio(records[record_do_setor]);
+            if(retorno != ERRO){
+                return retorno;
+            }
+            else return ERRO;
     }
-
-
-
-
-    //int handle = open(record,diretorio_corrente);//NÃO SEI SE É ESSA A CHAMADA DO PONTEIRO
-   // return handle;
-
+    return ERRO;
 }
 
 int close2 (FILE2 handle){
