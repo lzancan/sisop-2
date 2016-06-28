@@ -85,8 +85,10 @@ FILE2 open2 (char *filename){
 
 int close2 (FILE2 handle){
     inicializa (&superbloco_lido);
-    close(0x01, handle);
-    return 0;
+    if(fecha_arquivo_aberto(handle)!=ERRO){
+        return 0;
+    }
+    return ERRO;
 }
 
 int read2 (FILE2 handle, char *buffer, int size){
@@ -178,5 +180,9 @@ int chdir2 (char *pathname){
 
 int getcwd2 (char *pathname, int size){
     inicializa (&superbloco_lido);
-    return 0;
+    if(size>=strlen(diretorio_corrente)){
+        strcpy(pathname,diretorio_corrente);
+        return 0;
+    }
+    else return ERRO;
 }

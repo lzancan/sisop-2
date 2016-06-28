@@ -108,5 +108,7 @@ int abre_arquivo_diretorio(struct t2fs_record record);
 void imprime_arquivo_aberto(OPENED_FILE arquivo);
 //imprime todos os arquivos (incluindo os diretorios) abertos
 void imprime_arquivos_abertos ();
+//fecha um arquivo aberto. Retorna 0 se conseguiu e ERRO caso contrário
+int fecha_arquivo_aberto(int handle);
 
 #endif

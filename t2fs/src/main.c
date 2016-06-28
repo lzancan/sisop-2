@@ -10,7 +10,20 @@ int main(){
     //imprime_setor(records);
     //le_setor(records,TAMANHO_BLOCO*2+1); // diretório raiz
     //imprime_setor(records);
-    //printf ("%d e %d\n",open2("oi1"),open2("oi2"));
+    //open2("oi1");
+    //open2("oi2");
+    //open2("oi1");
+    //open2("oi2");
+    char oi[MAX_FILE_NAME_SIZE];
+    getcwd2 (oi, 15);
+    printf("%s",oi);
+    //imprime_arquivos_abertos();
+    //imprime_arquivos_abertos();
+    //close2 (2);close2 (3);close2 (1);close2 (0);close2 (2);close2 (3);
+    //imprime_arquivos_abertos();
+
+    //close2(1);close2(0);
+    //imprime_arquivos_abertos();
     //imprime_arquivos_abertos();
     //printf ("num arq_abertos: %d , num dirs_abertos: %d \n",numero_arquivos_abertos,numero_diretorios_abertos);
 

@@ -544,58 +544,79 @@ int abre_arquivo_diretorio(struct t2fs_record record){
     return ERRO;
 }
 
-int close(char TypeVal, int handle) {
-    /*
-    if(TypeVal == 0x01){
-        OPENED_FILE *file = NULL;
-        OPENED_FILE *previous = NULL;
-        file = opened_files->first;
-            while (file != NULL) {
-                if (file->handle == handle) {
-                    if (previous) {
-                        previous->next = file->next;
-                    }
-                if (opened_files->first == file) {
-                    opened_files->first = file->next;
-                }
-                if (opened_files->last == file) {
-                    opened_files->last = previous;
-                }
-                free(file);
-                nOpenedFiles--;
+int fecha_arquivo_aberto(int handle) {
+    OPENED_FILE* arquivo=procura_arquivo_aberto(handle);
+    if(arquivo!=NULL && arquivo->record.TypeVal==TYPEVAL_REGULAR){
+        OPENED_FILE* arquivo_temp=arquivos_abertos.first;
+        if(arquivos_abertos.first==arquivos_abertos.last){ // só tem um arquivo
+            arquivos_abertos.first=NULL;
+            arquivos_abertos.last=NULL;
+            numero_arquivos_abertos=0;
             return 0;
-            }
-        previous = file;
-        file = file->next;
         }
-    }
-    else if(TypeVal == 0x02)
-    {
-        OPENED_FILE *dir = NULL;
-        OPENED_FILE *predir = NULL;
-        dir = opened_dirs->first;
-            while (dir!= NULL) {
-                if (dir->handle == handle) {
-                    if (predir) {
-                        predir->next = dir->next;
-                    }
-                if (opened_dirs->first == dir) {
-                    opened_dirs->first = dir->next;
-                }
-                if (opened_dirs->last == dir) {
-                    opened_dirs->last = predir;
-                }
-                free(dir);
-                nOpenedDirs--;
-            return 0;
+        if(arquivo==arquivo_temp){ // é o primeiro
+                arquivos_abertos.first=arquivo->next;
             }
-        predir = dir;
-        dir = dir->next;
+        else{
+                while (arquivo_temp->next!=arquivo) {
+                    if(arquivo_temp==arquivos_abertos.last){
+                        arquivo_temp=arquivos_abertos.first;
+                    }
+                    else{
+                        arquivo_temp=arquivo_temp->next;
+                    }
+                }
+                if(arquivo_temp->next==arquivo){
+                    if(arquivo->next!=NULL){
+                        arquivo_temp->next=arquivo->next;
+                        arquivo=NULL;
+                    }
+                    else {
+                        arquivo=NULL;
+                        arquivos_abertos.last=arquivo_temp;
+                    }
+                }
         }
 
+                free(arquivo);
+                numero_arquivos_abertos--;
+                return 0;
     }
-
-    return ERROR_SIGNAL;
-    */
-    return 0;
+    else if(arquivo!=NULL&&arquivo->record.TypeVal == TYPEVAL_DIRETORIO){
+        OPENED_FILE* arquivo_temp=diretorios_abertos.first;
+        if(diretorios_abertos.first==diretorios_abertos.last){ // só tem um arquivo
+            diretorios_abertos.first=NULL;
+            diretorios_abertos.last=NULL;
+            numero_diretorios_abertos=0;
+            return 0;
+        }
+        if(arquivo==arquivo_temp){ // é o primeiro
+                    arquivos_abertos.first=arquivo->next;
+        }
+        else{
+            while (arquivo_temp->next!=arquivo) {
+                 if(arquivo_temp==diretorios_abertos.last){
+                        arquivo_temp=diretorios_abertos.first;
+                    }
+                    else{
+                        arquivo_temp=arquivo_temp->next;
+                    }
+            }
+            if(arquivo_temp->next==arquivo){
+                    if(arquivo->next!=NULL){
+                        arquivo_temp->next=arquivo->next;
+                        arquivo=NULL;
+                    }
+                    else {
+                        arquivo=NULL;
+                        arquivos_abertos.last=arquivo_temp;
+                    }
+            }
+        }
+            free(arquivo);
+            numero_arquivos_abertos--;
+            return 0;
 }
+    return ERRO;
+}
+
