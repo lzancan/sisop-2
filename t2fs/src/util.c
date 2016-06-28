@@ -17,6 +17,9 @@ void inicializa (int* superbloco_lido){
             fim_bloco_dados=(superbloco.nOfSectors/superbloco.blockSize)-superbloco.blockSize; // último bloco do disco
             posicao_atual=inicio_bloco_dados*4+contador_posicao*4;
             TAM_MAX_ARQ=superbloco.blockSize*(pow(superbloco.blockSize/4,2)+(superbloco.blockSize/4)+2);
+            TAMANHO_BLOCO=superbloco.blockSize;
+            posicao_atual=dir_corrente;
+            setor_atual=0;
         }
     }
 }
@@ -39,13 +42,13 @@ int le_record(struct t2fs_record* record,unsigned int sector,int posicao_no_seto
     else return -1;
 }
 
-int le_setor (struct setor_corrente* setor,unsigned int sector){
+int le_setor (struct t2fs_record* records,unsigned int sector){
     char content[SECTOR_SIZE];
     if(read_sector(sector,content)==0){
-        memcpy(&setor->record0, content, sizeof(struct t2fs_record));
-        memcpy(&setor->record1, content+64, sizeof(struct t2fs_record));
-        memcpy(&setor->record2, content+128, sizeof(struct t2fs_record));
-        memcpy(&setor->record3, content+192, sizeof(struct t2fs_record));
+        int i=0;
+        for(i=0;i<TAMANHO_BLOCO;i++){
+            memcpy(&records[i], content+(64*i), sizeof(struct t2fs_record));
+        }
         return 0;
     }
     else return ERRO;
@@ -75,11 +78,11 @@ void imprime_record (struct t2fs_record record){
     printf("ponteiro ind dupla: %d\n",record.doubleIndPtr); //Ponteiro de indireção dupla (little endian).
 }
 
-void imprime_setor (struct setor_corrente setor){
-    imprime_record (setor.record0);
-    imprime_record (setor.record1);
-    imprime_record (setor.record2);
-    imprime_record (setor.record3);
+void imprime_setor (struct t2fs_record* records){
+    int i=0;
+    for(i=0;i<TAMANHO_BLOCO;i++){
+        imprime_record (records[i]);
+    }
 }
 
 int eh_alfanumerico (char letra){
@@ -137,66 +140,67 @@ int caminho_absoluto_relativo (char* caminho){
     else return 0;
 }
 
-int search_sector (struct setor_corrente* sector,char* Filename,unsigned int setor){
-    le_setor(sector,setor);
-    if(!strcmp((sector->record0.name),Filename)){
-        return 0;
+int search_sector (struct t2fs_record* records,char* Filename,unsigned int setor){
+    le_setor(records,setor);
+    int i=0;
+    for(i=0;i<TAMANHO_BLOCO;i++){
+        if(!strcmp((records[i].name),Filename)){
+            return i;
+        }
     }
-    else if(!strcmp((sector->record1.name),Filename)){
-        return 1;
-    }
-    else if(!strcmp((sector->record2.name),Filename)){
-        return 2;
-    }
-    else if(!strcmp((sector->record3.name),Filename)){
-        return 3;
-    }
-    else return ERRO;
+    return ERRO;
 }
 
-int search_bloco (struct setor_corrente* sector,char* Filename,int bloco){
+int search_bloco (struct t2fs_record* records,char* Filename,int bloco){
     int retorno;
-    retorno = search_sector(sector,Filename,(bloco*4)+0);
+    posicao_atual=bloco;
+    setor_atual=0;
+    retorno = search_sector(records,Filename,(bloco*4)+0);
     if(retorno!=ERRO){
+        setor_atual=0;
         return retorno;
     }
-    retorno=search_sector(sector,Filename,(bloco*4)+4);
+    retorno=search_sector(records,Filename,(bloco*4)+4);
     if(retorno!=ERRO){
+        setor_atual=1;
         return retorno;
     }
-    retorno=search_sector(sector,Filename,(bloco*4)+8);
+    retorno=search_sector(records,Filename,(bloco*4)+8);
     if(retorno!=ERRO){
+        setor_atual=2;
         return retorno;
     }
-    retorno=search_sector(sector,Filename,(bloco*4)+12);
+    retorno=search_sector(records,Filename,(bloco*4)+12);
     if(retorno!=ERRO){
+        setor_atual=3;
         return retorno;
     }
     return ERRO;
 }
 
-int procura_continuidade_dir (struct t2fs_record record,char* Filename){
-    int ponteiro_direto0=record.dataPtr[0];
-    int ponteiro_direto1=record.dataPtr[1];
-    int singleIndPtr=record.singleIndPtr;
-    int doubleIndPtr=record.doubleIndPtr;
+int procura_continuidade_dir (struct t2fs_record* records,char* Filename){
+    //int ponteiro_direto0=record.dataPtr[0];
+    int ponteiro_direto1=records[0].dataPtr[1];
+    int singleIndPtr=records[0].singleIndPtr;
+    int doubleIndPtr=records[0].doubleIndPtr;
     int retorno;
     if((ponteiro_direto1==dir_corrente||ponteiro_direto1==0)&&(singleIndPtr==dir_corrente||singleIndPtr==0)
         &&(doubleIndPtr==dir_corrente||doubleIndPtr==0)){
                     return 0;
         }
     else{
-        retorno=search_bloco(&setor,Filename,ponteiro_direto1); // procura no ponteiro direto 1
+        retorno=search_bloco(records,Filename,ponteiro_direto1); // procura no ponteiro direto 1
         if(retorno!=ERRO){ // achou
+            posicao_atual=ponteiro_direto1;
             return retorno;
         }
         else { // procura no single ind ptr
-            retorno = procura_single_ind_ptr(Filename,singleIndPtr);
+            retorno = procura_single_ind_ptr(records,Filename,singleIndPtr);
             if(retorno!=ERRO){ // achou
                 return retorno;
             }
             else{ // procura no double ind ptr
-                retorno = procura_double_ind_ptr(Filename,doubleIndPtr);
+                retorno = procura_double_ind_ptr(records,Filename,doubleIndPtr);
                 if(retorno != ERRO){ // achou
                     return retorno;
                 }
@@ -206,17 +210,22 @@ int procura_continuidade_dir (struct t2fs_record record,char* Filename){
     return 0; // não achou
 }
 
-int procura_single_ind_ptr(char* Filename,unsigned int singleIndPtr_setor){
+int procura_single_ind_ptr(struct t2fs_record* records,char* Filename,unsigned int singleIndPtr_setor){
     int retorno;
     char content[SECTOR_SIZE];
     if(read_sector(singleIndPtr_setor,content)==0){
-        memcpy(&ponteiro_indireto_simples, content, sizeof(struct IndPtr));
-        int i=0;
-        for(i=0;i<64;i++){
-            if(ponteiro_indireto_simples.bloco[i]!=0){
-                retorno=search_bloco(&setor,Filename,ponteiro_indireto_simples.bloco[i]);
-                if(retorno != ERRO)
-                    return retorno;
+        int j=0;
+        for(j=0;j<4;j++){
+            memcpy(&ponteiro_indireto_simples, content+(64*j), sizeof(struct IndPtr));
+            int i=0;
+            for(i=0;i<64;i++){
+                if(ponteiro_indireto_simples.bloco[i]!=0){
+                    retorno=search_bloco(records,Filename,ponteiro_indireto_simples.bloco[i]);
+                    if(retorno != ERRO){
+                        posicao_atual=ponteiro_indireto_simples.bloco[i];
+                        return retorno;
+                    }
+                }
             }
         }
     }
@@ -224,36 +233,40 @@ int procura_single_ind_ptr(char* Filename,unsigned int singleIndPtr_setor){
 
 }
 
-int procura_double_ind_ptr(char* Filename,unsigned int doubleIndPtr_setor){
+int procura_double_ind_ptr(struct t2fs_record* records, char* Filename,unsigned int doubleIndPtr_setor){
     int retorno;
     char content[SECTOR_SIZE];
     if(read_sector(doubleIndPtr_setor,content)==0){
-        memcpy(&ponteiro_indireto_duplo, content, sizeof(struct IndPtr));
-        int i=0;
-        for(i=0;i<64;i++){
-            if(ponteiro_indireto_duplo.bloco[i]!=0){
-                retorno=procura_single_ind_ptr(Filename,ponteiro_indireto_duplo.bloco[i]);
-                if(retorno != ERRO)
-                    return retorno;
+        int j=0;
+        for(j=0;j<4;j++){
+            memcpy(&ponteiro_indireto_duplo, content+(j*64), sizeof(struct IndPtr));
+            int i=0;
+            for(i=0;i<64;i++){
+                if(ponteiro_indireto_duplo.bloco[i]!=0){
+                    retorno=procura_single_ind_ptr(records,Filename,ponteiro_indireto_duplo.bloco[i]);
+                    if(retorno != ERRO){
+                        return retorno;
+                    }
+                }
             }
         }
     }
     return ERRO;
 }
 
-int procura_arquivo (char* Filename,int dir_corrente){
+int procura_arquivo (struct t2fs_record* records,char* Filename,int dir_corrente){
     int retorno;
     if(testa_nome(Filename)==0){ // se não "bate" o nome, retorna 0
         return ERRO;
     }
     set_posicao(dir_corrente);
-    retorno=search_bloco(&setor,Filename,dir_corrente);
+    retorno=search_bloco(records,Filename,dir_corrente);
     if(retorno!=ERRO){
         return retorno;
     }
     else{ // se não encontrou no diretório, procura se o diretório é continuo (testa os ponteiros e navega, procurando pelo arquivo
-        le_setor(&setor,dir_corrente*4);
-        retorno=procura_continuidade_dir (setor.record0,Filename);
+        le_setor(records,dir_corrente*4);
+        retorno=procura_continuidade_dir (records,Filename);
         if(retorno==0){
             return ERRO;
         }
@@ -263,20 +276,151 @@ int procura_arquivo (char* Filename,int dir_corrente){
     }
     return ERRO;
 }
-struct t2fs_record* inicializaRecord(char *name, int primeiroBloco)
-{
-    /*
+
+struct t2fs_record* inicializaRecord(char *name, int Bloco){
     struct t2fs_record *record = (struct t2fs_record*) calloc(1, sizeof(struct t2fs_record));
     record->TypeVal = TYPEVAL_REGULAR;
-    memset (record->name,'\0',25);
-    strncpy(record->name, name,25);
+    memset (record->name,'\0',32);
+    strncpy(record->name, name,32);
     record->bytesFileSize = 0;
-    record->dataPtr[0] = primeiroBloco;
+    record->dataPtr[0] = Bloco;
     return record;
-    */
-    return 0;
 }
 
+int search_sector_TypeVal (struct t2fs_record* records,unsigned int TypeVal,unsigned int setor){
+    le_setor(records,setor);
+    int i=0;
+    for(i=0;i<TAMANHO_BLOCO;i++){
+        if((unsigned int)records[i].TypeVal==TypeVal){
+            return i;
+        }
+    }
+    return ERRO;
+}
+
+int search_bloco_TypeVal (struct t2fs_record* records,unsigned int TypeVal, int bloco){
+    int retorno;
+    posicao_atual=bloco;
+    setor_atual=0;
+    retorno = search_sector_TypeVal(records,TypeVal,(bloco*4)+0);
+    if(retorno!=ERRO){
+        setor_atual=0;
+        return retorno;
+    }
+    retorno=search_sector_TypeVal(records,TypeVal,(bloco*4)+4);
+    if(retorno!=ERRO){
+        setor_atual=1;
+        return retorno;
+    }
+    retorno=search_sector_TypeVal(records,TypeVal,(bloco*4)+8);
+    if(retorno!=ERRO){
+        setor_atual=2;
+        return retorno;
+    }
+    retorno=search_sector_TypeVal(records,TypeVal,(bloco*4)+12);
+    if(retorno!=ERRO){
+        setor_atual=3;
+        return retorno;
+    }
+    return ERRO;
+}
+
+int procura_single_ind_ptr_TypeVal(struct t2fs_record* records,unsigned int TypeVal,unsigned int singleIndPtr_setor){
+    int retorno;
+    char content[SECTOR_SIZE];
+    if(read_sector(singleIndPtr_setor,content)==0){
+        int j=0;
+        for(j=0;j<4;j++){
+            memcpy(&ponteiro_indireto_simples, content+(64*j), sizeof(struct IndPtr));
+            int i=0;
+            for(i=0;i<64;i++){
+                if(ponteiro_indireto_simples.bloco[i]!=0){
+                    retorno=search_bloco_TypeVal(records,TypeVal,ponteiro_indireto_simples.bloco[i]);
+                    if(retorno != ERRO){
+                        posicao_atual=ponteiro_indireto_simples.bloco[i];
+                        return retorno;
+                    }
+                }
+            }
+        }
+    }
+    return ERRO;
+
+}
+
+int procura_double_ind_ptr_TypeVal(struct t2fs_record* records,unsigned int TypeVal,unsigned int doubleIndPtr_setor){
+    int retorno;
+    char content[SECTOR_SIZE];
+    if(read_sector(doubleIndPtr_setor,content)==0){
+        int j=0;
+        for(j=0;j<4;j++){
+            memcpy(&ponteiro_indireto_duplo, content+(j*64), sizeof(struct IndPtr));
+            int i=0;
+            for(i=0;i<64;i++){
+                if(ponteiro_indireto_duplo.bloco[i]!=0){
+                    retorno=procura_single_ind_ptr_TypeVal(records,TypeVal,ponteiro_indireto_duplo.bloco[i]);
+                    if(retorno != ERRO){
+                        return retorno;
+                    }
+                }
+            }
+        }
+    }
+    return ERRO;
+}
+
+int procura_continuidade_dir_TypeVal (struct t2fs_record* records,unsigned int TypeVal){
+    //int ponteiro_direto0=record.dataPtr[0];
+    int ponteiro_direto1=records[0].dataPtr[1];
+    int singleIndPtr=records[0].singleIndPtr;
+    int doubleIndPtr=records[0].doubleIndPtr;
+    int retorno;
+    if((ponteiro_direto1==dir_corrente||ponteiro_direto1==0)&&(singleIndPtr==dir_corrente||singleIndPtr==0)
+        &&(doubleIndPtr==dir_corrente||doubleIndPtr==0)){
+                    return 0;
+        }
+    else{
+        retorno=search_bloco_TypeVal(records,TypeVal,ponteiro_direto1); // procura no ponteiro direto 1
+        if(retorno!=ERRO){ // achou
+            posicao_atual=ponteiro_direto1;
+            return retorno;
+        }
+        else { // procura no single ind ptr
+            retorno = procura_single_ind_ptr_TypeVal(records,TypeVal,singleIndPtr);
+            if(retorno!=ERRO){ // achou
+                return retorno;
+            }
+            else{ // procura no double ind ptr
+                retorno = procura_double_ind_ptr_TypeVal(records,TypeVal,doubleIndPtr);
+                if(retorno != ERRO){ // achou
+                    return retorno;
+                }
+            }
+        }
+    }
+    return 0; // não achou
+}
+
+
+int procura_TypeVal (struct t2fs_record* records,int bloco,unsigned int TypeVal){
+    int retorno;
+    //set_posicao(dir_corrente);
+    retorno=search_bloco_TypeVal(records,TypeVal,bloco); // procura no bloco um typeval igual a 0. Se encontrar retorna o número do setor (0,1,2,3)
+    if(retorno!=ERRO){
+        return retorno;
+    }
+    else{ // se não encontrou no diretório, procura se o diretório é continuo (testa os ponteiros e navega, procurando pelo arquivo
+        le_setor(records,dir_corrente*4);
+        retorno=procura_continuidade_dir_TypeVal (records,TypeVal);
+        if(retorno==0){
+            return ERRO;
+        }
+        else {
+            return retorno;
+        }
+    }
+    return ERRO;
+}
 
 //OPEN FILES
 

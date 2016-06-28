@@ -18,18 +18,32 @@ int identify2 (char *name, int size){
 
 FILE2 create2 (char *filename){
     inicializa (&superbloco_lido);
-    /*
-    if(procura_arquivo(filename,diretorio_corrente)) //se existe o arquivo
-        return -1;
-    else{
-        int primeiroBloco = 0;
-        primeiroBloco = searchFreeBlock2();
-        if(primeiroBloco == 0)
-            return -1;
-        inicializaRecord(filename,primeiroBloco);
-
-    }*/
-    return 0;
+    struct t2fs_record records[TAMANHO_BLOCO]; // declara array de records, que formam um bloco
+    if(procura_arquivo(records,filename,dir_corrente)!=ERRO){ //se existe o arquivo no diretório corrente
+        return ERRO;
+    }
+    else{ // não existe, cria!
+        int bloco_livre=searchFreeBlock2();
+        if(bloco_livre!=0){ // se for 0 indica que não tem blocos livres ou deu erro
+            printf ("%d\n",bloco_livre);
+            char content[SECTOR_SIZE];
+            allocBlock2 (bloco_livre); // aloca o bloco de dados para o arquivo
+            struct t2fs_record* novo_record = inicializaRecord(filename, bloco_livre); // inicializa o arquivo, colocando os dados necessários
+            int record_do_setor_a_escrever=procura_TypeVal (records,dir_corrente,TYPEVAL_INVALIDO); // record da struct global setor em que vai escrever
+            if(record_do_setor_a_escrever!=ERRO){ // encontrou; e o setor (struct global) estará com os dados, então é só gravar
+                records[record_do_setor_a_escrever]=*novo_record;
+                //imprime_setor(records);
+                printf("pos atual: %d\n",posicao_atual);
+                printf("setor atual: %d\n",setor_atual);
+                write_sector ((posicao_atual*4)+setor_atual,(char*) records);
+                printf ("criou\n");
+                int handle;
+                handle = open2(filename);
+                return handle;
+            }
+        }
+    }
+    return ERRO;
 }
 
 int delete2 (char *filename){
