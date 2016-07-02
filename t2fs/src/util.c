@@ -483,6 +483,25 @@ char** matPath(char *path, int *k){
     return tst;
 }
 
+//int setor_cursor(int cursor, struct t2fs_record record)
+//{
+//    float k = cursor/TAMANHO_BLOCO;
+//    char *buffer, *buffer2;
+//    int d = floor(k);
+//    if(k<1)
+//        return record.dataPtr[0];
+//    else if(k<2)
+//        return record.dataPtr[1];
+//    else if(cursor < 66){
+//        read_sector(record.singleIndPtr, buffer);
+//        return atoi(buffer[d-2]);}
+//    else{
+//        read_sector(record.doubleIndPtr, buffer);
+//        int i = floor((d-66)/64);
+//        int m = floor((d-66)%64);
+//        read_sector(atoi(buffer[i]), buffer2);
+//        return atoi(buffer2[m]);}
+//}
 //OPEN
 
 OPENED_FILE* procura_arquivo_aberto(int handle)

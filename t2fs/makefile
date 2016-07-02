@@ -1,25 +1,18 @@
 CC=gcc
 LIB_DIR=./lib
+INC_DIR=./include
 BIN_DIR=./bin
 SRC_DIR=./src
-OBJ_DIR=./obj
-CFLAGS=-g -Wall
 
-all: t2fs
+OBJS= $(LIB_DIR)/util.o $(LIB_DIR)/bitmap.o $(LIB_DIR)/t2fs.o
+DEPS= $(LIB_DIR)/apidisk.o
 
-t2fs: main.o t2fs.o util.o
-	$(CC) -o $(BIN_DIR)/t2fs $(OBJ_DIR)/main.o $(OBJ_DIR)/t2fs.o $(OBJ_DIR)/util.o $(LIB_DIR)/apidisk.o $(LIB_DIR)/bitmap2.o
-	@echo "\ncompilou\n"
-        
-t2fs.o: $(SRC_DIR)/util.c 
-	$(CC) -c $^ -o $(OBJ_DIR)/$@ -Wall
+$(LIB_DIR)/%.o:$(SRC_DIR)/%.c
+	$(CC) -c $< -o $@ -Wall
 
-util.o: $(SRC_DIR)/util.c 
-	$(CC) -c $^ -o $(OBJ_DIR)/$@ -Wall 
-
-main.o: $(SRC_DIR)/main.c 
-	$(CC) -c $^ -o $(OBJ_DIR)/$@ -Wall
-
+all: $(OBJS)
+	ar crs $(LIB_DIR)/libt2fs.a $(OBJS) $(DEPS)
 
 clean:
-	rm -rf $(OBJ_DIR)/*.o $(BIN_DIR)/t2fs
+	rm -rf $(OBJS) $(LIB_DIR)/*.a $(BIN_DIR)/*.o $(SRC_DIR)/*.o $(SRC_DIR)/*~ $(INC_DIR)/*~ *~
+

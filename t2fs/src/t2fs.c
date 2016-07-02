@@ -94,9 +94,18 @@ int close2 (FILE2 handle){
 }
 
 int read2 (FILE2 handle, char *buffer, int size){
-    inicializa (&superbloco_lido);
+//    inicializa (&superbloco_lido);
+//    int retorno;
+//    OPENED_FILE *file;
+//    file = procura_arquivo_aberto(handle);
+//    if(file)
+//    {
+//
+//    }
+//    else
+//        return -1;
     return 0;
-}
+    }
 
 int write2 (FILE2 handle, char *buffer, int size){
     inicializa (&superbloco_lido);
@@ -104,62 +113,58 @@ int write2 (FILE2 handle, char *buffer, int size){
 }
 
 int seek2 (FILE2 handle, DWORD offset){
-    /*
+
     inicializa (&superbloco_lido);
-    OPENED_FILE* aux = findOpenedFile(handle);
-    if(!aux) return -1;
-    if(aux->record.bytesFileSize <= offset) aux->cursor = offset;
-    else if (offset == -1) aux->cursor = aux->record.bytesFileSize;
-    else return ERRO;
-    */
+//    OPENED_FILE* aux = findOpenedFile(handle);
+//    if(!aux) return -1;
+//    if(aux->record.bytesFileSize <= offset) aux->cursor = offset;
+//    else if (offset == -1) aux->cursor = aux->record.bytesFileSize;
+//    else return ERRO;
     return 0;
 }
 
 int mkdir2 (char *pathname){
-
-
-
-        inicializa (&superbloco_lido);
-    contador_diretorios=0;
-    struct t2fs_record records[4]; // declara array de records, que formam um setor
-    char* path="";
-    if(caminho_absoluto_relativo (pathname)==0){// relativo, começa SEM '/' (0= relativo, 1= absoluto) // absoluto é a partir do raiz, relativo é a partir do diretório corrente
-        // relativo, a partir do diretório corrente
-        strcat(path,diretorio_corrente); // path recebe o diretório corrente ('/')
-        strcat(path,pathname);// path recebe o pathname ('/dir1')
-    }
-    else{
-        // absoluto, a partir do raiz;
-        strcpy(path,pathname); //path recebe o nome do pathname ('/dir1')
-    }
-        // exemplo: 'dir1/dir2/dir3' , exemplo2: 'dir1'
-    // procura o diretório, procurando de um em um...
-    int i = 0;//numero de dirs
-    char **temp;
-    temp = matPath(pathname,&i);
-    char* dirs[i];
-    int k=0;
-    for(k=0;k<i;k++)//tem que fazer esse for pq da uns erros se ler direto do temp
-    {
-        dirs[k] = temp[k];
-    }
-
-    // TODO
-
-    // *********************
-    // se não existir, cria:
-    struct t2fs_record *novos_records = (struct t2fs_record*) calloc(4, sizeof(struct t2fs_record));
-
-    novos_records[0].bytesFileSize = 0;
-    novos_records[0].TypeVal = TYPEVAL_DIRETORIO;
-    strcpy(novos_records[0].name, ".");
-    novos_records[0].dataPtr[0] = 20; // bloco onde será gravado
-
-    novos_records[1].bytesFileSize = 0;
-    novos_records[1].TypeVal = TYPEVAL_DIRETORIO;
-    strcpy(novos_records[1].name, "..");
-    novos_records[0].dataPtr[0] = 20; // lugar do pai
-
+//    inicializa (&superbloco_lido);
+//    contador_diretorios=0;
+//    struct t2fs_record records[4]; // declara array de records, que formam um setor
+//    char* path="";
+//    if(caminho_absoluto_relativo (pathname)==0){// relativo, começa SEM '/' (0= relativo, 1= absoluto) // absoluto é a partir do raiz, relativo é a partir do diretório corrente
+//        // relativo, a partir do diretório corrente
+//        strcat(path,diretorio_corrente); // path recebe o diretório corrente ('/')
+//        strcat(path,pathname);// path recebe o pathname ('/dir1')
+//    }
+//    else{
+//        // absoluto, a partir do raiz;
+//        strcpy(path,pathname); //path recebe o nome do pathname ('/dir1')
+//    }
+//        // exemplo: 'dir1/dir2/dir3' , exemplo2: 'dir1'
+//    // procura o diretório, procurando de um em um...
+//    int i = 0;//numero de dirs
+//    char **temp;
+//    temp = matPath(pathname,&i);
+//    char* dirs[i];
+//    int k=0;
+//    for(k=0;k<i;k++)//tem que fazer esse for pq da uns erros se ler direto do temp
+//    {
+//        dirs[k] = temp[k];
+//    }
+//
+//    // TODO
+//
+//    // *********************
+//    // se não existir, cria:
+//    struct t2fs_record *novos_records = (struct t2fs_record*) calloc(4, sizeof(struct t2fs_record));
+//
+//    novos_records[0].bytesFileSize = 0;
+//    novos_records[0].TypeVal = TYPEVAL_DIRETORIO;
+//    strcpy(novos_records[0].name, ".");
+//    novos_records[0].dataPtr[0] = 20; // bloco onde será gravado
+//
+//    novos_records[1].bytesFileSize = 0;
+//    novos_records[1].TypeVal = TYPEVAL_DIRETORIO;
+//    strcpy(novos_records[1].name, "..");
+//    novos_records[0].dataPtr[0] = 20; // lugar do pai
+    return 0;
 
 }
 
@@ -170,9 +175,6 @@ int rmdir2 (char *pathname){
 
 DIR2 opendir2 (char *pathname){
     inicializa (&superbloco_lido);
-    //ACHA O DIREtORIO
-    int handle = 0;
-    //handle = open(record,PAI DO DIRETORIO QUE TU ACHOU);//NÃO SEI SE É ESSA A CHAMADA DO PONTEIRO
     return handle;
 }
 
@@ -188,14 +190,62 @@ int closedir2 (DIR2 handle){
 }
 
 int chdir2 (char *pathname){
-    inicializa (&superbloco_lido);
+//    printf("teste");
+//    inicializa (&superbloco_lido);
+//    int i = 0;//numero de dirs
+//    char **temp;
+//    temp = matPath(pathname,&i);
+//    char* dirs[i];
+//    int k=0;
+//    for(k=0;k<i;k++)//tem que fazer esse for pq da uns erros se ler direto do temp
+//    {
+//        dirs[k] = temp[k];
+//    }
+//    struct t2fs_record records[4];
+//    if(caminho_absoluto_relativo(pathname) == 1)
+//    {
+//        diretorio_corrente = "/";
+//        dir_corrente = 2;
+//        int l = 0;
+//        for(l =0;l<i;l++){
+//        int record_do_setor = procura_arquivo(records,dirs[l],dir_corrente);
+//        if(record_do_setor==ERRO){ // não achou o arquivo
+//            return ERRO;
+//        }
+//        else{ // achou o arquivo, abre ele...
+//            diretorio_corrente = strcat(diretorio_corrente,records[record_do_setor].name);
+//            diretorio_corrente = strcat(diretorio_corrente,"/");
+//            dir_corrente = records[record_do_setor].dataPtr[0];
+//
+//        }
+//
+//    }
+//    }
+//    else//não sei se é bem isso
+//    {
+//        int n = 0;
+//        for(n =1;n<i;n++){
+//        int record_do_setor = procura_arquivo(records,dirs[n],dir_corrente);
+//        if(record_do_setor==ERRO){ // não achou o arquivo
+//            return ERRO;
+//        }
+//        else{ // achou o arquivo, abre ele...
+//            diretorio_corrente = strcat(diretorio_corrente,records[record_do_setor].name);
+//            diretorio_corrente = strcat(diretorio_corrente,"/");
+//            dir_corrente = records[record_do_setor].dataPtr[0];
+//
+//        }
+//
+//    }
+//    }
     return 0;
 }
 
 int getcwd2 (char *pathname, int size){
     inicializa (&superbloco_lido);
+    printf("test");
     if(size>=strlen(diretorio_corrente)){
-        strcpy(pathname,diretorio_corrente);
+        pathname = diretorio_corrente;
         return 0;
     }
     else return ERRO;
